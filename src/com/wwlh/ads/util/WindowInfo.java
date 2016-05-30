@@ -1,4 +1,4 @@
-package com.wwlh.ads.utils;
+package com.wwlh.ads.util;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;

@@ -1,5 +1,5 @@
 
-package com.wwlh.ads.utils;
+package com.wwlh.ads.util;
 
 import java.util.Locale;
 

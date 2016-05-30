@@ -4,7 +4,7 @@ package com.wwlh.ads.entity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.wwlh.ads.utils.DateTimeTool;
+import com.wwlh.ads.util.DateTimeTool;
 
 import android.text.format.Time;
 
