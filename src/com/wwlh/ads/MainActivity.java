@@ -1,14 +1,17 @@
 package com.wwlh.ads;
 
+import com.google.gson.JsonObject;
 import com.wwlh.ads.R;
-
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	RelativeLayout rlyt;
@@ -22,9 +25,18 @@ public class MainActivity extends ActionBarActivity {
 
 		setContentView(rlyt);
 
-		AdView ad = new AdView(this);
+		AdView adView = new AdView(this, rlyt);
+		adView.setAdViewListener(new AdViewListener() {
 
-		ad.attachParent(rlyt);
+			@Override
+			public void onAdClick(JsonObject info) {
+				if (info.get("type").equals("apk")) {
+					Toast.makeText(MainActivity.this,
+							info.get("name") + "下载中。。。", Toast.LENGTH_SHORT)
+							.show();
+				}
+			}
+		});
 
 	}
 
@@ -40,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
 				public void run() {
 
 				}
-
 			}, 3000);
 		}
 	}

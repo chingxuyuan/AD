@@ -1,6 +1,7 @@
 package com.wwlh.ads.http;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
@@ -8,6 +9,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.cxy.clib.CCache;
+import com.wwlh.ads.App;
 import com.wwlh.ads.R;
 import com.wwlh.ads.entity.AdvertInfo;
 
@@ -27,9 +29,9 @@ public class ImgDownloader {
 		ImageListener listener = ImageLoader.getImageListener(imgView, R.drawable.t, R.drawable.ic_launcher);
 		String url = null;
 		if (advert != null) {
-			url = advert.getImageUrl();
+			url = App.URL_IMG + advert.getResourceURL();
 		}
-		url = "http://file01.16sucai.com/d/file/2011/0824/20110824050707181.jpg";
+		Log.i("img url", url);
 		loader.get(url, listener);
 	}
 

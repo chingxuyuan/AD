@@ -1,146 +1,143 @@
 package com.wwlh.ads.entity;
 
-import android.text.format.Time;
-
+import java.util.Date;
 
 public class AdvertInfo {
 
-	protected ShowTimeRange	showTime		= new ShowTimeRange();
-	protected String		advertKey		= null;
-	protected int			advertid		= 0;
-	protected String		imageUrl		= null;
-	protected String		imageFilename	= null;
-	protected int			imageType		= 0;
-	protected int			type			= 0;
-	protected Time			advertStartDate	= null;
-	protected Time			advertEndDate	= null;
-	protected int			interval;
-	protected String		advertInfoUrl	= null;
-	protected int			index			= 0;
-	protected int			taskId			= 0;
+	protected int id = 0;
+	protected String name = null;
+	protected int type = 0;
+	protected Date createTime = null;
+	protected double price = 0.0;
+	protected boolean enable = false;
+	protected String packageName = null;
+	protected String activeScript = null;
+	protected boolean system = false;
+	protected boolean replace = false;
+	protected String resourceURL = null;
+	protected String targetURL = null;
+	protected int showCount = 0;
+	protected int showInterval = 0;
+	protected String memo = null;
 
-	protected Time			clickDate		= null;
-	protected Time			installDate		= null;
-	protected Time			showDate		= null;
-	protected Time			advertDate		= null;
+	public int getId() {
+		return id;
+	}
 
-	protected String		packageName		= null;
-	protected int			replace			= 1;
-	public ShowTimeRange getShowTime() {
-		return showTime;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public void setShowTime(ShowTimeRange showTime) {
-		this.showTime = showTime;
+
+	public String getName() {
+		return name;
 	}
-	public String getAdvertKey() {
-		return advertKey;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	public void setAdvertKey(String advertKey) {
-		this.advertKey = advertKey;
-	}
-	public int getAdvertid() {
-		return advertid;
-	}
-	public void setAdvertid(int advertid) {
-		this.advertid = advertid;
-	}
-	public String getImageUrl() {
-		return imageUrl;
-	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-	public String getImageFilename() {
-		return imageFilename;
-	}
-	public void setImageFilename(String imageFilename) {
-		this.imageFilename = imageFilename;
-	}
-	public int getImageType() {
-		return imageType;
-	}
-	public void setImageType(int imageType) {
-		this.imageType = imageType;
-	}
+
 	public int getType() {
 		return type;
 	}
+
 	public void setType(int type) {
 		this.type = type;
 	}
-	public Time getAdvertStartDate() {
-		return advertStartDate;
+
+	public Date getCreateTime() {
+		return createTime;
 	}
-	public void setAdvertStartDate(Time advertStartDate) {
-		this.advertStartDate = advertStartDate;
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
-	public Time getAdvertEndDate() {
-		return advertEndDate;
+
+	public double getPrice() {
+		return price;
 	}
-	public void setAdvertEndDate(Time advertEndDate) {
-		this.advertEndDate = advertEndDate;
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
-	public int getInterval() {
-		return interval;
+
+	public boolean isEnable() {
+		return enable;
 	}
-	public void setInterval(int interval) {
-		this.interval = interval;
+
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
-	public String getAdvertInfoUrl() {
-		return advertInfoUrl;
-	}
-	public void setAdvertInfoUrl(String advertInfoUrl) {
-		this.advertInfoUrl = advertInfoUrl;
-	}
-	public int getIndex() {
-		return index;
-	}
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	public int getTaskId() {
-		return taskId;
-	}
-	public void setTaskId(int taskId) {
-		this.taskId = taskId;
-	}
-	public Time getClickDate() {
-		return clickDate;
-	}
-	public void setClickDate(Time clickDate) {
-		this.clickDate = clickDate;
-	}
-	public Time getInstallDate() {
-		return installDate;
-	}
-	public void setInstallDate(Time installDate) {
-		this.installDate = installDate;
-	}
-	public Time getShowDate() {
-		return showDate;
-	}
-	public void setShowDate(Time showDate) {
-		this.showDate = showDate;
-	}
-	public Time getAdvertDate() {
-		return advertDate;
-	}
-	public void setAdvertDate(Time advertDate) {
-		this.advertDate = advertDate;
-	}
+
 	public String getPackageName() {
 		return packageName;
 	}
+
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
-	public int getReplace() {
+
+	public String getActiveScript() {
+		return activeScript;
+	}
+
+	public void setActiveScript(String activeScript) {
+		this.activeScript = activeScript;
+	}
+
+	public boolean isSystem() {
+		return system;
+	}
+
+	public void setSystem(boolean system) {
+		this.system = system;
+	}
+
+	public boolean isReplace() {
 		return replace;
 	}
-	public void setReplace(int replace) {
+
+	public void setReplace(boolean replace) {
 		this.replace = replace;
 	}
-	
-	
-	
+
+	public String getResourceURL() {
+		return resourceURL;
+	}
+
+	public void setResourceURL(String resourceURL) {
+		this.resourceURL = resourceURL;
+	}
+
+	public String getTargetURL() {
+		return targetURL;
+	}
+
+	public void setTargetURL(String targetURL) {
+		this.targetURL = targetURL;
+	}
+
+	public int getShowCount() {
+		return showCount;
+	}
+
+	public void setShowCount(int showCount) {
+		this.showCount = showCount;
+	}
+
+	public int getShowInterval() {
+		return showInterval;
+	}
+
+	public void setShowInterval(int showInterval) {
+		this.showInterval = showInterval;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
 }

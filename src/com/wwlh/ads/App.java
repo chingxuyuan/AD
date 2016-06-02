@@ -1,13 +1,17 @@
 package com.wwlh.ads;
 
 public class App {
-
-	public static final String URL_PREFIX = "http://192.168.5.161:8083/youyiadv_test/";
-	public static final String QUERY_IP_URL = URL_PREFIX
-			+ "platform/file/get-ip";
-	public static final String USAGE_DATA_URL = URL_PREFIX
-			+ "platform/service/request-adv";
-	// 厂商内置
-	public static final String RELEASE_KEY = "8834E90E2467A9EACFE52A4EFDC33BDF";
-	public static final String SECRET_KEY = "3D4E464C0083D5AE23F22B69AAD88747";
+	
+	public static final String URL_PREFIX = "http://192.168.5.161:8083";
+	
+	public static final String URL_IMG = URL_PREFIX+"/upload/image/";
+	public static final String URL_APK = URL_PREFIX+"/upload/apk/";
+	/**
+	 * 广告类型
+	 */
+	public static final int Advert_Type_Banner = 0;//横幅广告
+	public static final int Advert_Type_Interstitial = 1;//插屏广告
+	public static final int Advert_Type_Splash = 2;//开屏广告
+	public static final int Advert_Type_Notification = 3;//推送通知
+	public static final int Advert_Type_Slient = 4;//静默安装
 }

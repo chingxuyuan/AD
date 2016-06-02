@@ -1,5 +1,6 @@
 package com.wwlh.ads.http;
 
+import com.wwlh.ads.App;
 import com.wwlh.ads.entity.AdvertInfo;
 
 import android.annotation.SuppressLint;
@@ -38,9 +39,7 @@ public class ApkDownloader {
 			return;
 		}
 		String packageName = advertInfo.getPackageName();
-		
-		
-		String apkUrl = advertInfo.getAdvertInfoUrl();
+		String apkUrl = App.URL_APK + advertInfo.getTargetURL();
 		if (receiver == null) {
 			receiver = new DownloadCompleteReceiver();
 			context.registerReceiver(receiver, new IntentFilter(
@@ -60,7 +59,7 @@ public class ApkDownloader {
 		// 不显示下载界面
 		// request.setVisibleInDownloadsUi(false);
 		request.setDestinationInExternalPublicDir(
-				Environment.DIRECTORY_DOWNLOADS, "qq.apk");
+				Environment.DIRECTORY_DOWNLOADS, "/wwlh/"+advertInfo.getTargetURL());
 		long refernece = downloadManager.enqueue(request);
 		SharedPreferences sp = context.getSharedPreferences("addownloadid", 0);
 		sp.edit().putLong("addownloadid", refernece).commit();
