@@ -30,9 +30,11 @@ public class MainActivity extends ActionBarActivity {
 
 			@Override
 			public void onAdClick(JsonObject info) {
-				if (info.get("type").equals("apk")) {
+				
+				String type = info.get("type").getAsString();
+				if (type.equals("apk")) {
 					Toast.makeText(MainActivity.this,
-							info.get("name") + "下载中。。。", Toast.LENGTH_SHORT)
+							"你点击的应用 "+ info.get("name") +"正在下载。。。", Toast.LENGTH_LONG)
 							.show();
 				}
 			}

@@ -41,10 +41,22 @@ public class AdView {
 		
 		this.parent = parent;
 		
-		requestAdvert();
+		
+		req();
 		
 	}
 	
+	
+	public void req(){
+		requestAdvert();
+		new Handler().postDelayed(new Runnable(){
+			@Override
+			public void run() {
+				req();
+				
+			}
+		}, 3000);
+	}
 	
 	/**
 	 * 请求一条广告并添加到广告布局中
