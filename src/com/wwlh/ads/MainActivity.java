@@ -26,17 +26,12 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(rlyt);
 
 		AdView adView = new AdView(this, rlyt);
+		
 		adView.setAdViewListener(new AdViewListener() {
 
 			@Override
 			public void onAdClick(JsonObject info) {
 				
-				String type = info.get("type").getAsString();
-				if (type.equals("apk")) {
-					Toast.makeText(MainActivity.this,
-							"你点击的应用 "+ info.get("name") +"正在下载。。。", Toast.LENGTH_LONG)
-							.show();
-				}
 			}
 		});
 

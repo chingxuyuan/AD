@@ -2,12 +2,14 @@ package com.wwlh.ads;
 
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.wwlh.ads.entity.AdvertInfo;
@@ -26,10 +28,22 @@ public class AdView {
 	private Context context;
 
 	private AdvertInfo advertInfo;
+	
+	private HashMap<String, String> params;
+	
+	private AdRequest adRequest = null;
 
 	private AdViewListener adViewListener;
 	
 	
+	private Handler handler = new Handler( );
+	
+	
+	private ImgDownloader down = null;
+	
+	private boolean showToast = true;
+	
+	private long millis = 5000;
 	/**
 	 * 构造一个广告控件，自动
 	 * @param context 上下文对象
@@ -40,29 +54,52 @@ public class AdView {
 		this.context = context;
 		
 		this.parent = parent;
+		initAdRequest();
+		down = new ImgDownloader(context);
+		
+		refresh();
 		
 		
-		req();
 		
 	}
 	
-	
-	public void req(){
-		requestAdvert();
-		new Handler().postDelayed(new Runnable(){
-			@Override
-			public void run() {
-				req();
-				
-			}
-		}, 3000);
-	}
 	
 	/**
-	 * 请求一条广告并添加到广告布局中
+	 * 设置刷新广告间隔时间
+	 * @param millis 间隔毫秒数
 	 */
-	private void requestAdvert(){
+	public void setIntervals(long millis){
+		this.millis = millis;
+	}
+	
+	
+	public void setShowToast(boolean show){
+		showToast = show;
+	}
+	
+	private void refresh(){
 		
+		if(context == null){
+			return;
+		}else if(((Activity) context).isFinishing()){
+			return;
+		}
+
+		requestAdvert();
+		
+		
+		handler.postDelayed(new Runnable(){
+			@Override
+			public void run() {
+				refresh();
+				
+			}
+		}, millis);
+		
+		
+	}
+	
+	private void initAdRequest(){
 		RespLisener listener = new AdRequest.RespLisener(){
 			@Override
 			public void resp(AdvertInfo advert) {
@@ -70,9 +107,16 @@ public class AdView {
 				initContainer();
 			}
 		};
-		AdRequest adRequest = new AdRequest(context,listener);
-		HashMap<String, String> params = new HashMap<String, String>();
+		adRequest = new AdRequest(context,listener);
+		params = new HashMap<String, String>();
 		params.put("type", App.Advert_Type_Banner+"");
+	}
+	
+	
+	/**
+	 * 请求一条广告并添加到广告布局中
+	 */
+	private void requestAdvert(){
 		adRequest.request(params);
 	}
 
@@ -85,6 +129,7 @@ public class AdView {
 		
 		if(container!=null){
 			ImageView imgAd = (ImageView) container.findViewWithTag("img");
+			
 			loadImage(imgAd);
 			
 			return;
@@ -111,18 +156,18 @@ public class AdView {
 					}else{
 						json.addProperty("type", "url");
 					}
-					
-					
 					adViewListener.onAdClick(json);
 				}
+				
+				toastApkDownload();
 				//跳转到广告页面
 				AdIntent intent = new AdIntent(context);
 				intent.start(advertInfo);
 				
-				new Handler().postDelayed(new Runnable(){
+				handler.postDelayed(new Runnable(){
 					@Override
 					public void run() {
-						requestAdvert();
+						refresh();
 						
 					}
 				}, 1000);
@@ -138,6 +183,7 @@ public class AdView {
 	
 	
 	
+	
 
 	/**
 	 * 从网络缓存中异步加载广告图片
@@ -145,7 +191,6 @@ public class AdView {
 	 * @param imgView
 	 */
 	private void loadImage(ImageView imgView) {
-		ImgDownloader down = new ImgDownloader(context);
 		down.load(imgView, advertInfo);
 	}
 
@@ -166,6 +211,24 @@ public class AdView {
 
 		parent.addView(container, rllp);
 	}
+	
+	
+	
+	private void toastApkDownload(){
+		if(showToast == false){
+			return;
+		}
+		
+		String url = advertInfo.getTargetURL();
+		if (url.endsWith(".apk")) {
+			Toast.makeText(context,
+					"你点击的"+ advertInfo.getName() +"正在下载。。。", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
+
+	
+	
 
 	public AdvertInfo getAdvertInfo() {
 		return advertInfo;

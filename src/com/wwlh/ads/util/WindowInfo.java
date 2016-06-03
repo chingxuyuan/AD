@@ -4,11 +4,12 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 public class WindowInfo {
-
+	
+	public static int screenWidth;
 	public static int[] $screen(Context ctx) {
 		DisplayMetrics dm = new DisplayMetrics();
 		((Activity) ctx).getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int screenWidth = dm.widthPixels;
+		screenWidth = dm.widthPixels;
 		int screenHeight = dm.heightPixels;
 		return new int[] { screenWidth, screenHeight };
 	}

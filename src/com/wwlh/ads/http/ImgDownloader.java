@@ -20,7 +20,10 @@ public class ImgDownloader {
 	public ImgDownloader(Context context) {
 		super();
 		this.context = context;
-		queue = Volley.newRequestQueue(context);
+		if(queue == null){
+			queue = Volley.newRequestQueue(context);
+		}
+		
 	}
 
 	public void load(ImageView imgView, AdvertInfo advert) {
