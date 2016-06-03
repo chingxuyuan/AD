@@ -27,6 +27,8 @@ public class MainActivity extends ActionBarActivity {
 
 		AdView adView = new AdView(this, rlyt);
 		
+		adView.setIntervals(500);
+		
 		adView.setAdViewListener(new AdViewListener() {
 
 			@Override

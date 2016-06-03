@@ -45,61 +45,22 @@ public class AdView {
 	
 	private long millis = 5000;
 	/**
-	 * 构造一个广告控件，自动
+	 * 构造一个广告控件，自动刷新
 	 * @param context 上下文对象
 	 * @param parent 指定父布局，类型为RelativeLayout
 	 */
 	public AdView(Context context,RelativeLayout parent) {
-		
 		this.context = context;
-		
 		this.parent = parent;
 		initAdRequest();
-		down = new ImgDownloader(context);
-		
 		refresh();
-		
-		
-		
 	}
-	
 	
 	/**
-	 * 设置刷新广告间隔时间
-	 * @param millis 间隔毫秒数
+	 * 初始化广告网络请求
 	 */
-	public void setIntervals(long millis){
-		this.millis = millis;
-	}
-	
-	
-	public void setShowToast(boolean show){
-		showToast = show;
-	}
-	
-	private void refresh(){
-		
-		if(context == null){
-			return;
-		}else if(((Activity) context).isFinishing()){
-			return;
-		}
-
-		requestAdvert();
-		
-		
-		handler.postDelayed(new Runnable(){
-			@Override
-			public void run() {
-				refresh();
-				
-			}
-		}, millis);
-		
-		
-	}
-	
 	private void initAdRequest(){
+		down = new ImgDownloader(context);
 		RespLisener listener = new AdRequest.RespLisener(){
 			@Override
 			public void resp(AdvertInfo advert) {
@@ -112,6 +73,24 @@ public class AdView {
 		params.put("type", App.Advert_Type_Banner+"");
 	}
 	
+	/**
+	 * 刷新广告
+	 */
+	private void refresh(){
+		
+		if(context == null){
+			return;
+		}else if(((Activity) context).isFinishing()){
+			return;
+		}
+		requestAdvert();
+		handler.postDelayed(new Runnable(){
+			@Override
+			public void run() {
+				refresh();
+			}
+		}, millis);
+	}
 	
 	/**
 	 * 请求一条广告并添加到广告布局中
@@ -120,18 +99,14 @@ public class AdView {
 		adRequest.request(params);
 	}
 
-
 	/**
 	 * 广告容器，加载横幅广告
 	 */
 	private void initContainer() {
 		
-		
 		if(container!=null){
 			ImageView imgAd = (ImageView) container.findViewWithTag("img");
-			
 			loadImage(imgAd);
-			
 			return;
 		}
 		container = new RelativeLayout(context);
@@ -163,14 +138,6 @@ public class AdView {
 				//跳转到广告页面
 				AdIntent intent = new AdIntent(context);
 				intent.start(advertInfo);
-				
-				handler.postDelayed(new Runnable(){
-					@Override
-					public void run() {
-						refresh();
-						
-					}
-				}, 1000);
 			}
 		});
 
@@ -181,18 +148,6 @@ public class AdView {
 		attachParent();
 	}
 	
-	
-	
-	
-
-	/**
-	 * 从网络缓存中异步加载广告图片
-	 * 
-	 * @param imgView
-	 */
-	private void loadImage(ImageView imgView) {
-		down.load(imgView, advertInfo);
-	}
 
 	/**
 	 * 将banner广告布局添加到父布局中
@@ -212,7 +167,16 @@ public class AdView {
 		parent.addView(container, rllp);
 	}
 	
-	
+
+	/**
+	 * 从网络缓存中异步加载广告图片
+	 * 
+	 * @param imgView
+	 */
+	private void loadImage(ImageView imgView) {
+		down.load(imgView, advertInfo);
+	}
+
 	
 	private void toastApkDownload(){
 		if(showToast == false){
@@ -228,7 +192,22 @@ public class AdView {
 	}
 
 	
+	/**
+	 * 设置刷新广告间隔时间
+	 * @param millis 间隔毫秒数
+	 */
+	public void setIntervals(long millis){
+		this.millis = millis;
+	}
 	
+	
+	/**
+	 * 设置是否显示应用下载toast提示
+	 * @param show
+	 */
+	public void setShowToast(boolean show){
+		showToast = show;
+	}
 
 	public AdvertInfo getAdvertInfo() {
 		return advertInfo;
