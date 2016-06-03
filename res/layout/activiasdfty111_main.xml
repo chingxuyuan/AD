@@ -16,4 +16,13 @@
         android:layout_marginTop="79dp"
         android:text="弹出广告" />
 
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="54dp" />
+
 </RelativeLayout>

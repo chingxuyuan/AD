@@ -1,10 +1,13 @@
 package com.wwlh.ads;
 import com.wwlh.ads.R;
+import com.wwlh.ads.util.BitmapUtil;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class MainActivity extends ActionBarActivity {
@@ -18,12 +21,14 @@ public class MainActivity extends ActionBarActivity {
 				R.layout.activiasdfty111_main, null);
 
 		setContentView(rlyt);
-
+		ImageView imgView = (ImageView) findViewById(R.id.img);
+		
+		//imgView.setImageBitmap(BitmapUtil.getCloseIcon(this));
 		
 		/*
 		 *去掉注释，添加横幅广告 
 		 */
-		//AdView adView = new AdView(this, rlyt);
+		AdView adView = new AdView(this, rlyt);
 		final InterstitialAd  iad = new InterstitialAd(this);
 		findViewById(R.id.btnInterAD).setOnClickListener(new OnClickListener(){
 			@Override

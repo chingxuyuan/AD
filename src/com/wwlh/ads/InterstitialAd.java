@@ -20,6 +20,7 @@ import com.wwlh.ads.entity.AdvertInfo;
 import com.wwlh.ads.http.AdRequest;
 import com.wwlh.ads.http.AdRequest.RespLisener;
 import com.wwlh.ads.http.ImgDownloader;
+import com.wwlh.ads.util.BitmapUtil;
 import com.wwlh.ads.util.WindowInfo;
 
 public class InterstitialAd {
@@ -153,8 +154,9 @@ public class InterstitialAd {
 		//imgClose.setBackgroundColor(Color.GRAY);
 		//ic_menu_close_clear_cancel
 		//ic_notification_clear_all
-		imgClose.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-
+		//imgClose.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+		imgClose.setImageBitmap(BitmapUtil.getCloseIcon(context));
+		
 		imgClose.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -210,7 +212,8 @@ public class InterstitialAd {
 		rllpClose = new RelativeLayout.LayoutParams(wc, wc);
 		rllpClose.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		rllpClose.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		imgClose.setPadding(50, 0, 0, 50);
+		//rllpClose.setMargins(10, 10, 10, 10);
+		imgClose.setPadding(50, 20, 20, 50);
 		container.addView(imgClose, rllpClose);
 
 		ppw = new PopupWindow(context);
