@@ -5,9 +5,12 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -19,17 +22,20 @@ import com.wwlh.ads.http.ImgDownloader;
 import com.wwlh.ads.util.WindowInfo;
 
 public class InterstitialAd {
-
-	
-	private RelativeLayout parent;
 	
 	private RelativeLayout container;
+	
+	private PopupWindow ppw = null;
 
 	private Context context;
 
 	private AdvertInfo advertInfo;
+	
+	private HashMap<String, String> params;
+	
+	private AdRequest adRequest = null;
 
-	private AdViewListener adViewListener;
+	private InterstitialAdListener adViewListener;
 	
 	
 	private Handler handler = new Handler( );
@@ -39,67 +45,23 @@ public class InterstitialAd {
 	
 	private boolean showToast = true;
 	
-	private long millis = 5000;
+	private long millis = 1000;
 	/**
-	 * 构造一个广告控件，自动
+	 * 构造一个广告控件，自动刷新
 	 * @param context 上下文对象
 	 * @param parent 指定父布局，类型为RelativeLayout
 	 */
-	public InterstitialAd(Context context,RelativeLayout parent) {
-		
+	public InterstitialAd(Context context) {
 		this.context = context;
-		
-		this.parent = parent;
-		
-		down = new ImgDownloader(context);
-		
+		initAdRequest();
 		refresh();
-		
-		
-		
-	}
-	
-	
-	/**
-	 * 设置刷新广告间隔时间
-	 * @param millis 间隔毫秒数
-	 */
-	public void setIntervals(long millis){
-		this.millis = millis;
-	}
-	
-	
-	public void setShowToast(boolean show){
-		showToast = show;
-	}
-	
-	private void refresh(){
-		
-		if(context == null){
-			return;
-		}else if(((Activity) context).isFinishing()){
-			return;
-		}
-
-		requestAdvert();
-		
-		
-		handler.postDelayed(new Runnable(){
-			@Override
-			public void run() {
-				refresh();
-				
-			}
-		}, millis);
-		
-		
 	}
 	
 	/**
-	 * 请求一条广告并添加到广告布局中
+	 * 初始化广告网络请求
 	 */
-	private void requestAdvert(){
-		
+	private void initAdRequest(){
+		down = new ImgDownloader(context);
 		RespLisener listener = new AdRequest.RespLisener(){
 			@Override
 			public void resp(AdvertInfo advert) {
@@ -107,34 +69,85 @@ public class InterstitialAd {
 				initContainer();
 			}
 		};
-		AdRequest adRequest = new AdRequest(context,listener);
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("type", App.Advert_Type_Banner+"");
+		adRequest = new AdRequest(context,listener);
+		params = new HashMap<String, String>();
+		params.put("type", App.Advert_Type_Interstitial+"");
+	}
+	
+	/**
+	 * 刷新广告
+	 */
+	private void refresh(){
+		
+		if(context == null){
+			return;
+		}else if(((Activity) context).isFinishing()){
+			return;
+		}
+		requestAdvert();
+		handler.postDelayed(new Runnable(){
+			@Override
+			public void run() {
+				refresh();
+			}
+		}, millis);
+	}
+	
+	
+	public void show(){
+		if(ppw!=null){
+			ViewGroup win =  (ViewGroup) ((Activity) context).findViewById(android.R.id.content);
+			View parent = win.getChildAt(0);
+			ppw.showAtLocation(parent, Gravity.CENTER, 0, 0);
+		}
+	}
+	
+	private void dismiss(){
+		if(ppw!=null){
+			ppw.dismiss();
+		}
+	}
+	
+	/**
+	 * 请求一条广告并添加到广告布局中
+	 */
+	private void requestAdvert(){
 		adRequest.request(params);
 	}
-
 
 	/**
 	 * 广告容器，加载横幅广告
 	 */
 	private void initContainer() {
-		
-		
 		if(container!=null){
 			ImageView imgAd = (ImageView) container.findViewWithTag("img");
-			
 			loadImage(imgAd);
-			
 			return;
 		}
-		container = new RelativeLayout(context);
+		initDialog();
+		
+	}
+	
+
+	/**
+	 * 将banner广告布局添加到父布局中
+	 * 
+	 * @param parent
+	 *            指定父布局，类型为RelativeLayout
+	 */
+	private void initDialog() {
+		/*
+		 * 先建一张图片
+		 */
 		ImageView imgAd = new ImageView(context);
 		imgAd.setTag("img");
 		imgAd.setScaleType(ImageView.ScaleType.FIT_XY);
-		loadImage(imgAd);
+		
 		imgAd.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				dismiss();
+				
 				if (adViewListener != null) {
 					JsonObject json = new JsonObject();
 					
@@ -156,26 +169,26 @@ public class InterstitialAd {
 				//跳转到广告页面
 				AdIntent intent = new AdIntent(context);
 				intent.start(advertInfo);
-				
-				handler.postDelayed(new Runnable(){
-					@Override
-					public void run() {
-						refresh();
-						
-					}
-				}, 1000);
 			}
 		});
-
+		
+		/*
+		 *添加到Relativelayout 
+		 */
 		int mp = RelativeLayout.LayoutParams.MATCH_PARENT;
+		int  width = WindowInfo.$screen(context)[0];
 		RelativeLayout.LayoutParams rllp = null;
-		rllp = new RelativeLayout.LayoutParams(mp, mp);
+		rllp = new RelativeLayout.LayoutParams(width, mp);
+		rllp.addRule(RelativeLayout.CENTER_IN_PARENT);
+		container = new RelativeLayout(context);
 		container.addView(imgAd, rllp);
-		attachParent();
+		
+		ppw = new PopupWindow(context);
+		ppw.setContentView(container);
+		
+		loadImage(imgAd);
+		
 	}
-	
-	
-	
 	
 
 	/**
@@ -187,25 +200,6 @@ public class InterstitialAd {
 		down.load(imgView, advertInfo);
 	}
 
-	/**
-	 * 将banner广告布局添加到父布局中
-	 * 
-	 * @param parent
-	 *            指定父布局，类型为RelativeLayout
-	 */
-	private void attachParent() {
-		int width = RelativeLayout.LayoutParams.MATCH_PARENT;
-		int height = WindowInfo.calcAdHeight(context);
-		RelativeLayout.LayoutParams rllp = null;
-
-		rllp = new RelativeLayout.LayoutParams(width, height);
-
-		rllp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-
-		parent.addView(container, rllp);
-	}
-	
-	
 	
 	private void toastApkDownload(){
 		if(showToast == false){
@@ -221,7 +215,22 @@ public class InterstitialAd {
 	}
 
 	
+	/**
+	 * 设置刷新广告间隔时间
+	 * @param millis 间隔毫秒数
+	 */
+	public void setIntervals(long millis){
+		this.millis = millis;
+	}
 	
+	
+	/**
+	 * 设置是否显示应用下载toast提示
+	 * @param show
+	 */
+	public void setShowToast(boolean show){
+		showToast = show;
+	}
 
 	public AdvertInfo getAdvertInfo() {
 		return advertInfo;
@@ -231,7 +240,7 @@ public class InterstitialAd {
 		this.advertInfo = advertInfo;
 	}
 
-	public void setAdViewListener(AdViewListener adViewListener) {
+	public void setAdViewListener(InterstitialAdListener adViewListener) {
 		this.adViewListener = adViewListener;
 	}
 

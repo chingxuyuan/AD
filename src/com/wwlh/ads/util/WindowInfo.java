@@ -24,5 +24,6 @@ public class WindowInfo {
 		int screenWidth = $screen(ctx)[0];
 		return (int) (screenWidth/6);
 	}
+	
 
 }
