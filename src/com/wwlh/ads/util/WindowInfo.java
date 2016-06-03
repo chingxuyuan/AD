@@ -25,5 +25,15 @@ public class WindowInfo {
 		return (int) (screenWidth/6);
 	}
 	
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 */
+	public static int $width(Context ctx){
+		int screenWidth = $screen(ctx)[0];
+		return screenWidth;
+	}
+	
 
 }
