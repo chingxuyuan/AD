@@ -18,7 +18,7 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 
 		rlyt = (RelativeLayout) LayoutInflater.from(this).inflate(
-				R.layout.activiasdfty111_main, null);
+				R.layout.activity_main, null);
 
 		setContentView(rlyt);
 		ImageView imgView = (ImageView) findViewById(R.id.img);
@@ -29,6 +29,11 @@ public class MainActivity extends ActionBarActivity {
 		 *去掉注释，添加横幅广告 
 		 */
 		AdView adView = new AdView(this, rlyt);
+		
+		
+		/*
+		 * 插屏广告
+		 */
 		final InterstitialAd  iad = new InterstitialAd(this);
 		findViewById(R.id.btnInterAD).setOnClickListener(new OnClickListener(){
 			@Override
@@ -36,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
 				iad.show();
 			}
 		});
+		
 
 	}
 }

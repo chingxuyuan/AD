@@ -1,5 +1,8 @@
 package com.wwlh.ads;
 
-public interface SplashAdListener {
+import com.wwlh.ads.interfaces.IAdListener;
 
+public interface SplashAdListener extends  IAdListener{
+	
+	public void onDismissed();
 }

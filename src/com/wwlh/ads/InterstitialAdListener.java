@@ -1,11 +1,6 @@
 package com.wwlh.ads;
 
-import com.google.gson.JsonObject;
+import com.wwlh.ads.interfaces.IAdListener;
 
-public interface InterstitialAdListener{
-	/**
-	 * 点击广告
-	 * @param info
-	 */
-	public void onAdClick(JsonObject info);
+public interface InterstitialAdListener extends  IAdListener{
 }

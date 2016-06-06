@@ -1,6 +1,6 @@
 package com.wwlh.ads;
-import com.google.gson.JsonObject;
-public interface AdViewListener {
+import com.wwlh.ads.interfaces.IAdListener;
+public interface AdViewListener extends  IAdListener{
 	
 	/**
 	 * 广告切换中
@@ -25,10 +25,4 @@ public interface AdViewListener {
 	 */
 	//public void onAdFailed(String reason);
 	
-	/**
-	 * 点击广告
-	 * @param info
-	 */
-
-	public void onAdClick(JsonObject info);
 }
