@@ -23,13 +23,12 @@ public class ImgDownloader {
 		if(queue == null){
 			queue = Volley.newRequestQueue(context);
 		}
-		
 	}
-
+	
 	public void load(ImageView imgView, AdvertInfo advert) {
 		CCache imageCache = CCache.instance(context);
 		ImageLoader loader = new ImageLoader(queue, imageCache);
-		ImageListener listener = ImageLoader.getImageListener(imgView, R.drawable.t, R.drawable.ic_launcher);
+		ImageListener listener = ImageLoader.getImageListener(imgView, 0, 0);
 		String url = null;
 		if (advert != null) {
 			url = App.URL_IMG + advert.getResourceURL();

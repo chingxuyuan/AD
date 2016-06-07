@@ -60,7 +60,9 @@ public class AdRequest {
 	 * @param msg
 	 */
 	public void parse(Message msg) {
-		
+		if(msg.obj == null){
+			return;
+		}
 		
 		String str = msg.obj.toString();
 

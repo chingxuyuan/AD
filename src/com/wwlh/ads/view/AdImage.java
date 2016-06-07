@@ -19,7 +19,9 @@ public class AdImage extends ImageView {
 	private IAdListener adListener;
 	private AdvertInfo advertInfo;
 
-	ImgDownloader down = null;
+	private ImgDownloader down = null;
+	
+	private boolean clickable = false;
 
 	public AdImage(Context context) {
 		super(context);
@@ -33,19 +35,19 @@ public class AdImage extends ImageView {
 		this.setTag("img");
 		this.setScaleType(ImageView.ScaleType.FIT_XY);
 		down.load(this, advertInfo);
+		
+		this.setOnClickListener(onclickListener);
 	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
-
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			intent();
-			this.setEnabled(false);
+	
+	private OnClickListener onclickListener = new OnClickListener(){
+		@Override
+		public void onClick(View arg0) {
+			if(clickable){
+				intent();
+			}
 		}
-
-		return super.onTouchEvent(event);
-	}
+		
+	};
 
 	private void intent() {
 		if (adListener != null) {
