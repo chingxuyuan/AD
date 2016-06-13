@@ -132,24 +132,30 @@ public class SplashAd {
 		if(splashAdListener == null){
 			return;
 		}
-		if (rlytAd != null) {
-			ImageView imgAd = (ImageView) rlytAd.findViewWithTag("img");
-			if (imgAd != null) {
-				BitmapDrawable drawable = (BitmapDrawable) imgAd.getDrawable();
-				if(drawable!=null){
-					Bitmap bmp = drawable.getBitmap();
-					if (null != bmp && !bmp.isRecycled()) {
-						bmp.recycle();
-						bmp = null;
-					}
-				}
-			}
+		
+		if(((Activity)context).isFinishing()){
+			return;
 		}
 		
+		Log.i("SplashAd", "dismiss");
 		splashAdListener.onDismissed();
 		splashAdListener = null;
 		
-
+		if (rlytAd != null) {
+			ImageView imgAd = (ImageView) rlytAd.findViewWithTag("img");
+			imgAd.setImageBitmap(null);
+//			if (imgAd != null) {
+//				BitmapDrawable drawable = (BitmapDrawable) imgAd.getDrawable();
+//				if(drawable!=null){
+//					imgAd.setImageBitmap(null);
+////					Bitmap bmp = drawable.getBitmap();
+////					if (null != bmp && !bmp.isRecycled()) {
+////						bmp.recycle();
+////						bmp = null;
+////					}
+//				}
+//			}
+		}
 		((Activity) SplashAd.this.context).finish();
 		
 
