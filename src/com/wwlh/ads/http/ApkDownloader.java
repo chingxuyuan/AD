@@ -1,7 +1,10 @@
 package com.wwlh.ads.http;
 
+import java.util.HashMap;
+
 import com.wwlh.ads.App;
 import com.wwlh.ads.entity.AdvertInfo;
+import com.wwlh.ads.util.ApkUtil;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
@@ -13,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 public class ApkDownloader {
 
@@ -20,13 +24,17 @@ public class ApkDownloader {
 
 	private DownloadCompleteReceiver receiver;
 	private long downId = 0;
-
+	private ApkUtil apkUtil;
+	private AdRequest adRequest;
+	
+	
 	public ApkDownloader(Context context) {
 		super();
 		this.context = context;
+		apkUtil = new ApkUtil(context);
+		adRequest = new AdRequest(context, null);
+		
 	}
-
-	
 
 	/**
 	 * 调用DownLoadManager下载apk
@@ -38,7 +46,21 @@ public class ApkDownloader {
 		if(advertInfo == null){
 			return;
 		}
+		
+		//根据包名判断应用是否安装
 		String packageName = advertInfo.getPackageName();
+		boolean isInstalled  = false;
+		if(packageName!=null && packageName.length()>0){
+			isInstalled = apkUtil.isApkInstalled(packageName);
+			Log.i("ApkDownloader", "应用是否安装"+isInstalled);
+		}
+		if(isInstalled){
+			apkUtil.openInsatlledApk(packageName);
+			Log.i("ApkDownloader", "打开应用");
+			return;
+		}
+		
+		//下载应用
 		String apkUrl = App.URL_APK + advertInfo.getTargetURL();
 		if (receiver == null) {
 			receiver = new DownloadCompleteReceiver();
@@ -62,7 +84,7 @@ public class ApkDownloader {
 				Environment.DIRECTORY_DOWNLOADS, "/wwlh/"+advertInfo.getTargetURL());
 		long refernece = downloadManager.enqueue(request);
 		SharedPreferences sp = context.getSharedPreferences("addownloadid", 0);
-		sp.edit().putLong("addownloadid", refernece).commit();
+		sp.edit().putLong("addownloadid", refernece).putInt("advertid", advertInfo.getId()).commit();
 
 	}
 
@@ -84,6 +106,8 @@ public class ApkDownloader {
 						0);
 
 				long refernece = sp.getLong("addownloadid", 0);
+				
+				int advertid = sp.getInt("advertid", 0);
 
 				if (refernece == downId) {
 
@@ -91,12 +115,22 @@ public class ApkDownloader {
 
 					DownloadManager dManager = (DownloadManager) context
 							.getSystemService(serviceString);
-
+					
 					Intent install = new Intent(Intent.ACTION_VIEW);
 
 					Uri downloadFileUri = dManager
 							.getUriForDownloadedFile(downId);
 
+					
+					//解析包名并发送到服务器
+					String pkg = apkUtil.getPakageByApk(downloadFileUri.getPath());
+					HashMap<String, String> hashMap = new HashMap<String, String>();
+					hashMap.put("id", advertid+"");
+					hashMap.put("packageName", pkg);
+					adRequest.updateAdvert(hashMap);
+					
+					
+					//去安装
 					install.setDataAndType(downloadFileUri,
 							"application/vnd.android.package-archive");
 
@@ -114,4 +148,5 @@ public class ApkDownloader {
 
 		}
 	}
+	
 }

@@ -21,6 +21,7 @@ import com.wwlh.ads.http.AdRequest;
 import com.wwlh.ads.http.AdRequest.RespLisener;
 import com.wwlh.ads.http.ImgDownloader;
 import com.wwlh.ads.util.BitmapUtil;
+import com.wwlh.ads.util.NetUtil;
 import com.wwlh.ads.util.WindowInfo;
 
 public class InterstitialAd {

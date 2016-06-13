@@ -9,4 +9,5 @@ public interface IAdListener {
 	 */
 
 	public void onAdClick(JsonObject info);
+	
 }

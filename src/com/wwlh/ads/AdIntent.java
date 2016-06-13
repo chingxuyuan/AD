@@ -61,6 +61,6 @@ public class AdIntent {
 		}
 		return "http://www.baidu.com";
 	}
-
+	
 
 }

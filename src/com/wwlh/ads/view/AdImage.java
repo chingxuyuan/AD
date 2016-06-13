@@ -18,9 +18,7 @@ public class AdImage extends ImageView {
 	private Context context;
 	private IAdListener adListener;
 	private AdvertInfo advertInfo;
-
 	private ImgDownloader down = null;
-	
 	private boolean clickable = false;
 
 	public AdImage(Context context) {
@@ -73,5 +71,14 @@ public class AdImage extends ImageView {
 		intent.start(advertInfo);
 
 	}
+	
+	public void setADImageListener(AdImageListener adImageListener){
+		down.setAdImageListener(adImageListener);
+	}
+	
+	 public interface AdImageListener{
+		 public void onError();
+	 } ;
+	
 
 }

@@ -26,6 +26,8 @@ public class AdRequest {
 	private Context context;
 	private CNet net;
 	private String url = App.URL_PREFIX + "/sdk/randAdvert";
+	
+	private String updateAdvert = App.URL_PREFIX + "/sdk/updateAdvert";
 	private RespLisener respLisener;
 
 	public AdRequest(Context context, RespLisener respLisener) {
@@ -37,6 +39,10 @@ public class AdRequest {
 
 	public void request(Map<String, String> params) {
 		net.request(url, params, 123);
+	}
+	
+	public void updateAdvert(Map<String, String> params) {
+		net.request(updateAdvert, params, 125);
 	}
 
 	/**

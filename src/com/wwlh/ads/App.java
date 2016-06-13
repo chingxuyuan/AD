@@ -2,7 +2,7 @@ package com.wwlh.ads;
 
 public class App {
 	
-	public static final String URL_PREFIX = "http://192.168.5.161:8083";
+	public static final String URL_PREFIX = "http://192.168.1.121:8083";
 	
 	public static final String URL_IMG = URL_PREFIX+"/upload/image/";
 	public static final String URL_APK = URL_PREFIX+"/upload/apk/";

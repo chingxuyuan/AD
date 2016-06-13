@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.wwlh.ads.entity.AdvertInfo;
 import com.wwlh.ads.http.AdRequest;
 import com.wwlh.ads.http.AdRequest.RespLisener;
+import com.wwlh.ads.util.NetUtil;
 import com.wwlh.ads.util.Share;
 import com.wwlh.ads.view.AdImage;
 import com.wwlh.ads.view.JumpLayout;
@@ -18,6 +19,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -88,7 +90,15 @@ public class SplashAd {
 		RelativeLayout.LayoutParams rllp = null;
 		rllp = new RelativeLayout.LayoutParams(mp, mp);
 		AdImage imgAd = new AdImage(context);
+		imgAd.setADImageListener(new AdImage.AdImageListener() {
+			@Override
+			public void onError() {
+				Log.i("SplashAd", "图片加载失败，");
+				dismiss();
+			}
+		});
 		imgAd.init(advert, splashAdListener);
+		
 		rlytAd.addView(imgAd, rllp);
 
 		JumpLayout jumpLayout = new JumpLayout(context);
@@ -122,19 +132,23 @@ public class SplashAd {
 		if(splashAdListener == null){
 			return;
 		}
-		splashAdListener.onDismissed();
-		splashAdListener = null;
 		if (rlytAd != null) {
 			ImageView imgAd = (ImageView) rlytAd.findViewWithTag("img");
 			if (imgAd != null) {
 				BitmapDrawable drawable = (BitmapDrawable) imgAd.getDrawable();
-				Bitmap bmp = drawable.getBitmap();
-				if (null != bmp && !bmp.isRecycled()) {
-					bmp.recycle();
-					bmp = null;
+				if(drawable!=null){
+					Bitmap bmp = drawable.getBitmap();
+					if (null != bmp && !bmp.isRecycled()) {
+						bmp.recycle();
+						bmp = null;
+					}
 				}
 			}
 		}
+		
+		splashAdListener.onDismissed();
+		splashAdListener = null;
+		
 
 		((Activity) SplashAd.this.context).finish();
 		

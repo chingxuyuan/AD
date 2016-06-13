@@ -16,6 +16,7 @@ public class AdActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ad);
 		SplashAd splashAd = new SplashAd(this);
+		splashAd.setDuration(10000);
 		splashAd.setSplashAdListener(new SplashAdListener() {
 			
 			@Override
@@ -29,6 +30,7 @@ public class AdActivity extends Activity {
 				
 				AdActivity.this.startActivity(new Intent(AdActivity.this, MainActivity.class));
 			}
+
 		});
 	}
 
