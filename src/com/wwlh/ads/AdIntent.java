@@ -55,11 +55,11 @@ public class AdIntent {
 	public String $W(String tagUrl){
 		
 		if(tagUrl.startsWith("http")){
-			
+			return tagUrl;
 		}else{
 			return "http://"+tagUrl;
 		}
-		return "http://www.baidu.com";
+		
 	}
 	
 

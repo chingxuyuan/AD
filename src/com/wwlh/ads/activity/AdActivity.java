@@ -1,6 +1,10 @@
-package com.wwlh.ads;
+package com.wwlh.ads.activity;
 
 import com.google.gson.JsonObject;
+import com.wwlh.ads.R;
+import com.wwlh.ads.SplashAd;
+import com.wwlh.ads.SplashAdListener;
+import com.wwlh.ads.R.layout;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -15,22 +19,20 @@ public class AdActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ad);
+		/*
+		 * 开屏广告
+		 */
 		SplashAd splashAd = new SplashAd(this);
-		splashAd.setDuration(10000);
 		splashAd.setSplashAdListener(new SplashAdListener() {
-			
 			@Override
 			public void onAdClick(JsonObject info) {
-				Toast.makeText(AdActivity.this, "点击", Toast.LENGTH_LONG).show();
-			}
-			
-			@Override
-			public void onDismissed() {
-				//Toast.makeText(AdActivity.this, "消失", Toast.LENGTH_LONG).show();
-				
-				AdActivity.this.startActivity(new Intent(AdActivity.this, MainActivity.class));
 			}
 
+			@Override
+			public void onDismissed() {
+				AdActivity.this.startActivity(new Intent(AdActivity.this,
+						MainActivity.class));
+			}
 		});
 	}
 

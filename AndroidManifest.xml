@@ -17,18 +17,15 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.wwlh.ads.activity.MainActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".AdActivity"
+            android:name="com.wwlh.ads.activity.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-  			 >
-            
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

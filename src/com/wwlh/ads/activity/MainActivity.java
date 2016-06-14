@@ -1,5 +1,9 @@
-package com.wwlh.ads;
+package com.wwlh.ads.activity;
+import com.wwlh.ads.AdView;
+import com.wwlh.ads.InterstitialAd;
 import com.wwlh.ads.R;
+import com.wwlh.ads.R.id;
+import com.wwlh.ads.R.layout;
 import com.wwlh.ads.util.BitmapUtil;
 
 import android.support.v7.app.ActionBarActivity;
@@ -21,18 +25,15 @@ public class MainActivity extends ActionBarActivity {
 				R.layout.activity_main, null);
 
 		setContentView(rlyt);
-		ImageView imgView = (ImageView) findViewById(R.id.img);
-		
-		//imgView.setImageBitmap(BitmapUtil.getCloseIcon(this));
 		
 		/*
-		 *去掉注释，添加横幅广告 
+		 *添加横幅广告 ，rlyt为父RelativeLayout布局，
 		 */
 		AdView adView = new AdView(this, rlyt);
 		
 		
 		/*
-		 * 插屏广告
+		 * 插屏广告，中间显示
 		 */
 		final InterstitialAd  iad = new InterstitialAd(this);
 		findViewById(R.id.btnInterAD).setOnClickListener(new OnClickListener(){

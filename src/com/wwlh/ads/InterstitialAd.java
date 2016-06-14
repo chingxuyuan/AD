@@ -2,9 +2,12 @@ package com.wwlh.ads;
 
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
@@ -142,20 +146,18 @@ public class InterstitialAd {
 	 *            指定父布局，类型为RelativeLayout
 	 */
 
-	private void initDialog() {
+	@SuppressLint("ResourceAsColor") private void initDialog() {
 		/*
 		 * 先建一张图片
 		 */
 		ImageView imgAd = new ImageView(context);
 		imgAd.setTag("img");
+		imgAd.setBackgroundColor(Color.RED);
+		imgAd.setId(101);
 		imgAd.setScaleType(ImageView.ScaleType.FIT_XY);
-
 		ImageView imgClose = new ImageView(context);
 		imgClose.setTag("imgClose");
-		//imgClose.setBackgroundColor(Color.GRAY);
-		//ic_menu_close_clear_cancel
-		//ic_notification_clear_all
-		//imgClose.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+		
 		imgClose.setImageBitmap(BitmapUtil.getCloseIcon(context));
 		
 		imgClose.setOnClickListener(new OnClickListener() {
@@ -203,27 +205,29 @@ public class InterstitialAd {
 
 		int width = WindowInfo.$width(context);
 
-		rllp = new RelativeLayout.LayoutParams(width, wc);
+		rllp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		rllp.addRule(RelativeLayout.CENTER_IN_PARENT);
 		container = new RelativeLayout(context);
 		container.addView(imgAd, rllp);
 
+		
 		RelativeLayout.LayoutParams rllpClose = null;
-
-		rllpClose = new RelativeLayout.LayoutParams(wc, wc);
-		rllpClose.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		rllpClose.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		//rllpClose.setMargins(10, 10, 10, 10);
-		imgClose.setPadding(50, 20, 20, 50);
+		rllpClose = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		rllpClose.addRule(RelativeLayout.ALIGN_RIGHT,101);
+		rllpClose.addRule(RelativeLayout.ALIGN_TOP,101);
+		imgClose.setPadding(50, 10, 10, 50);
 		container.addView(imgClose, rllpClose);
+		
 
 		ppw = new PopupWindow(context);
-		ppw.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+		ppw.setWidth(width);
 		ppw.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 		ppw.setContentView(container);
 		ppw.setBackgroundDrawable(null);
 		ppw.setClippingEnabled(true);
 
+	
+		
 		loadImage(imgAd);
 
 	}

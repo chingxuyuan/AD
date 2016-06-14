@@ -37,7 +37,7 @@ public class SplashAd {
 
 	private Share share = null;
 
-	private long Duration = 3000;
+	private long Duration = 5000;
 
 	/**
 	 * 构造一个广告控件，自动刷新
