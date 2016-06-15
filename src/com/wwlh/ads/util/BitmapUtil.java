@@ -16,8 +16,8 @@ public class BitmapUtil {
 		options.inJustDecodeBounds = true;
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
 				android.R.drawable.ic_menu_close_clear_cancel, options);
-		int imageHeight = options.outHeight/10*9;
-		int imageWidth = options.outWidth/10*9;
+		int imageHeight = options.outHeight/10*8;
+		int imageWidth = options.outWidth/10*8;
 		
 		Bitmap bb = Bitmap.createBitmap(imageWidth, imageHeight, Config.ARGB_8888);
 		Canvas canvas = new Canvas(bb);

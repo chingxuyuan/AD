@@ -22,6 +22,7 @@ public class CFile {
 	public Context context;
 	public static String externalCacheDir = null;
 
+	private String Lg = "SplashAd";
 	public CFile(Context context) {
 		this.context = context;
 		externalCacheDir = getSDCacheDir();
@@ -42,10 +43,10 @@ public class CFile {
 	public Bitmap getBitmapFromSD(String url) {
 		String fileName = getFileName(url);
 		if (isExist(fileName)) {
-			Log.i("FileCache", "对本地缓存的查找 ");
+			Log.i(Lg, "对本地缓存的查找 ");
 			return BitmapFactory.decodeFile(getFilePath(url));
 		} else {
-			Log.i("FileCache", "本地文件不存在");
+			Log.i(Lg, "本地文件不存在");
 			return null;
 		}
 
@@ -55,18 +56,18 @@ public class CFile {
 	 * 保存文件到本地缓存
 	 */
 	public void putBitmapToSD(String url, Bitmap bitmap) {
-		Log.i("FileCache", "保存文件到本地");
+		Log.i(Lg, "保存文件到本地");
 		// MD5加密后保存
 
 		String fileName = getFileName(url);
 
 		if (isExist(fileName)) {
-			Log.i("FileCache", "保存文件到本地，但是已经存在");
+			Log.i(Lg, "保存文件到本地，但是已经存在");
 			return;
 		}
 
 		//
-		Log.i("FileCache", "对本地缓存的保存 " + fileName);
+		Log.i(Lg, "对本地缓存的保存 " + fileName);
 		File file = new File(getFilePath(url));
 		// 保存
 		try {
@@ -75,10 +76,10 @@ public class CFile {
 			}
 			FileOutputStream fos = new FileOutputStream(file);
 			if (url.endsWith(".png") || url.endsWith(".PNG")) {
-				Log.i("FileCache", "保存文件到本地，png");
+				Log.i(Lg, "保存文件到本地，png");
 				bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			} else {
-				Log.i("FileCache", "保存文件到本地，jpg");
+				Log.i(Lg, "保存文件到本地，jpg");
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 			}
 
@@ -103,7 +104,7 @@ public class CFile {
 		if (sdState.equals(Environment.MEDIA_MOUNTED)) {
 			File cacheDir = context.getExternalCacheDir();
 			externalCacheDir = cacheDir.getAbsolutePath();
-			Log.i("FileCache", "externalCacheDir " + externalCacheDir);
+			Log.i(Lg, "externalCacheDir " + externalCacheDir);
 		}
 		return externalCacheDir;
 	}
@@ -128,7 +129,7 @@ public class CFile {
 		for (int i = 0; i < cacheFiles.length; i++) {
 			String name = cacheFiles[i].getName();
 			if (name.equals(fileName)) {
-				Log.i("FileCache", "文件本地存在");
+				Log.i(Lg, "文件本地存在");
 				return true;
 			}
 		}

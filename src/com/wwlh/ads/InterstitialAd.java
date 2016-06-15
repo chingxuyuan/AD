@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +51,7 @@ public class InterstitialAd {
 
 	private boolean showToast = true;
 
-	private long millis = 1000;
+	private long millis = -1;
 
 	/**
 	 * 构造一个广告控件，自动刷新
@@ -75,6 +76,7 @@ public class InterstitialAd {
 			@Override
 			public void resp(AdvertInfo advert) {
 				advertInfo = advert;
+				Log.i("InterstitialAd", "返回广告: "+advertInfo.getName());
 				initContainer();
 			}
 		};
@@ -87,13 +89,18 @@ public class InterstitialAd {
 	 * 刷新广告
 	 */
 	private void refresh() {
-
+		
 		if (context == null) {
 			return;
 		} else if (((Activity) context).isFinishing()) {
 			return;
 		}
 		requestAdvert();
+		
+		if(millis == -1){
+			return;
+		}
+		
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
@@ -107,7 +114,8 @@ public class InterstitialAd {
 	 */
 	public void show() {
 		if (ppw != null) {
-			dismiss();
+			ppw.dismiss();
+			Log.i("InterstitialAd", "显示广告 "+advertInfo.getName());
 			View cv = ((Activity) context).getWindow().getDecorView();
 			ppw.showAtLocation(cv, Gravity.CENTER, 0, 0);
 		}
@@ -116,8 +124,10 @@ public class InterstitialAd {
 	private void dismiss() {
 		if (ppw != null) {
 			ppw.dismiss();
+			refresh();
 		}
 	}
+	
 
 	/**
 	 * 请求一条广告并添加到广告布局中
@@ -131,33 +141,31 @@ public class InterstitialAd {
 	 */
 	private void initContainer() {
 		if (container != null) {
+			
+			Log.i("InterstitialAd", "复用以前界面 ");
 			ImageView imgAd = (ImageView) container.findViewWithTag("img");
+			imgAd.setImageBitmap(null);
 			loadImage(imgAd);
 			return;
 		}
+		
+		Log.i("InterstitialAd", "新界面 ");
 		initDialog();
 
 	}
 
-	/**
-	 * 将banner广告布局添加到父布局中
-	 * 
-	 * @param parent
-	 *            指定父布局，类型为RelativeLayout
-	 */
 
-	@SuppressLint("ResourceAsColor") private void initDialog() {
+	private void initDialog() {
 		/*
 		 * 先建一张图片
 		 */
 		ImageView imgAd = new ImageView(context);
 		imgAd.setTag("img");
-		imgAd.setBackgroundColor(Color.RED);
 		imgAd.setId(101);
 		imgAd.setScaleType(ImageView.ScaleType.FIT_XY);
+		
 		ImageView imgClose = new ImageView(context);
 		imgClose.setTag("imgClose");
-		
 		imgClose.setImageBitmap(BitmapUtil.getCloseIcon(context));
 		
 		imgClose.setOnClickListener(new OnClickListener() {
@@ -171,7 +179,7 @@ public class InterstitialAd {
 			@Override
 			public void onClick(View view) {
 				dismiss();
-
+				Log.i("InterstitialAd", "点击 "+advertInfo.getName());
 				if (adViewListener != null) {
 					JsonObject json = new JsonObject();
 
@@ -225,10 +233,10 @@ public class InterstitialAd {
 		ppw.setContentView(container);
 		ppw.setBackgroundDrawable(null);
 		ppw.setClippingEnabled(true);
-
-	
 		
 		loadImage(imgAd);
+		
+		
 
 	}
 
@@ -238,6 +246,7 @@ public class InterstitialAd {
 	 * @param imgView
 	 */
 	private void loadImage(ImageView imgView) {
+		Log.i("InterstitialAd", "请求加载广告图片: "+advertInfo.getName());
 		down.load(imgView, advertInfo);
 	}
 

@@ -77,7 +77,8 @@ public class AdImage extends ImageView {
 	}
 	
 	 public interface AdImageListener{
-		 public void onError();
+		 //isImmediate == true 本地存在立即返回 
+		 public void onResponse(boolean hasBimtap,boolean isImmediate);
 	 } ;
 	
 

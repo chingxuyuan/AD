@@ -41,9 +41,34 @@ public class ImgDownloader {
 		if (advert != null) {
 			url = App.URL_IMG + advert.getResourceURL();
 		}
-		Log.i("img url", url);
+		Log.i("SplashAd", url);
 		loader.get(url, listener);
 	}
+	
+	
+	/**
+	 * 只缓存图片
+	 * @param advert
+	 
+	public void cacheImage(AdvertInfo advert) {
+		CCache imageCache = CCache.instance(context);
+		ImageLoader loader = new ImageLoader(queue, imageCache);
+		String url = null;
+		if (advert != null) {
+			url = App.URL_IMG + advert.getResourceURL();
+		}
+		Log.i("SplashAd", url);
+		ImageListener listener = new ImageListener(){
+			@Override
+			public void onErrorResponse(VolleyError error) {
+			}
+			@Override
+			public void onResponse(ImageContainer response, boolean isImmediate) {
+			}
+		};
+		loader.get(url, listener);
+	}
+	*/
 
 	public void setAdImageListener(AdImageListener adImageListener) {
 		this.adImageListener = adImageListener;
@@ -62,29 +87,35 @@ public class ImgDownloader {
 		return new ImageListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
+				if(view == null){
+					return;
+				}
 				
 				if (errorImageResId != 0) {
 					view.setImageResource(errorImageResId);
 				}
 				
 				if (adImageListener != null) {
-					adImageListener.onError();
-					Log.i("ImgDownloader", "VolleyError");
+					adImageListener.onResponse(false,false);
 				}
 			}
 
 			@Override
 			public void onResponse(ImageContainer response, boolean isImmediate) {
+				if(view == null){
+					return;
+				}
 				
+				Log.i("SplashAd", "网络返回"+isImmediate);
 				if (response.getBitmap() != null) {
 					view.setImageBitmap(response.getBitmap());
+					if(adImageListener!=null){
+						adImageListener.onResponse(true,isImmediate);
+					}
 				} else if (defaultImageResId != 0) {
 					view.setImageResource(defaultImageResId);
-				}else{
-					if (adImageListener != null) {
-						adImageListener.onError();
-						Log.i("ImgDownloader", "response 图片加载失败");
-					}
+				}else if(adImageListener!=null){
+					adImageListener.onResponse(false,isImmediate);
 				}
 			}
 		};

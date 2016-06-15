@@ -19,6 +19,8 @@ public class CCache implements ImageCache {
 	private static CCache lruImageCache;
 
 	private CFile fileCache;
+	
+	private String Lg ="CCache";
 
 	private CCache(Context context) {
 		// 获取最大内存，并且开辟一块儿来作为缓存
@@ -51,10 +53,10 @@ public class CCache implements ImageCache {
 	public Bitmap getBitmap(String url) {
 		Bitmap bitmap = mMemoryCache.get(url);
 		if (bitmap == null) {
-			Log.i("LruImageCache","缓冲文件不存在");
+			Log.i(Lg,"缓冲文件不存在");
 			bitmap = fileCache.getBitmapFromSD(url);
 		} else {
-			Log.i("LruImageCache","缓冲存在");
+			Log.i(Lg,"缓冲存在");
 		}
 		return bitmap;
 	}
@@ -62,6 +64,7 @@ public class CCache implements ImageCache {
 	@Override
 	public void putBitmap(String url, Bitmap bitmap) {
 		if (getBitmap(url) == null) {
+			Log.i(Lg,"putBitmap");
 			mMemoryCache.put(url, bitmap);
 			fileCache.putBitmapToSD(url, bitmap);
 		}

@@ -24,6 +24,7 @@ public class JumpLayout extends RelativeLayout {
 		
 		TextView tv = new TextView(ctx);
 		tv.setText("跳过");
+		tv.setTextColor(Color.WHITE);
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
 		RelativeLayout.LayoutParams tp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		tv.setGravity(Gravity.CENTER);

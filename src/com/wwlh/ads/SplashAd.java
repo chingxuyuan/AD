@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.wwlh.ads.entity.AdvertInfo;
 import com.wwlh.ads.http.AdRequest;
+import com.wwlh.ads.http.ImgDownloader;
 import com.wwlh.ads.http.AdRequest.RespLisener;
 import com.wwlh.ads.util.NetUtil;
 import com.wwlh.ads.util.Share;
@@ -39,6 +40,11 @@ public class SplashAd {
 
 	private long Duration = 5000;
 
+	// 本地是否存在广告
+	private boolean existInLocal = false;
+	
+	private boolean isDismissed = false;
+
 	/**
 	 * 构造一个广告控件，自动刷新
 	 * 
@@ -47,44 +53,63 @@ public class SplashAd {
 	 * @param parent
 	 *            指定父布局，类型为RelativeLayout
 	 */
-	public SplashAd(Context context) {
+	public SplashAd(Context context, SplashAdListener splashAdListener) {
 		this.context = context;
 		share = new Share(context);
 		advert = getLocalHistory();
+		this.splashAdListener = splashAdListener;
 
-		if (advert == null || advert.getResourceURL() == null) {
-			if (splashAdListener != null) {
-				splashAdListener.onDismissed();
-			}
-		} else {
+		if (advert != null && advert.getResourceURL() != null) {
+			existInLocal = true;
 			initView();
+			refreshNext();
+			jumpLater();
+		} else {
+			dismiss();
+			refresh();
 		}
+		
+	}
 
-		/**
-		 * 一秒后刷新下一次显示的广告
-		 */
+	
+	/**
+	 * 刷新下一条数据
+	 */
+	private void refreshNext() {
+		// 一秒后刷新下一次显示的广告
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				Log.i("SplashAd", "一秒后刷新");
 				refresh();
 			}
 		}, 1000);
-
+	}
+	
+	
+	/**
+	 * 5秒后跳转
+	 */
+	private void jumpLater(){
 		/**
 		 * 5秒后跳转
 		 */
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				Log.i("SplashAd", "5秒后跳转");
 				dismiss();
 			}
 		}, Duration);
 	}
 
+
 	/**
 	 * 创建广告界面
 	 */
 	private void initView() {
+		
+		Log.i("SplashAd", "创建广告界面");
 		rlytAd = new RelativeLayout(context);
 		int mp = RelativeLayout.LayoutParams.MATCH_PARENT;
 		RelativeLayout.LayoutParams rllp = null;
@@ -92,13 +117,17 @@ public class SplashAd {
 		AdImage imgAd = new AdImage(context);
 		imgAd.setADImageListener(new AdImage.AdImageListener() {
 			@Override
-			public void onError() {
-				Log.i("SplashAd", "图片加载失败，");
-				dismiss();
+			public void onResponse(boolean hasBitmap,boolean isImmediate) {
+				//本地存在广告，但是缓存中没有图片
+				if(existInLocal && hasBitmap==false &&isImmediate ==true){
+					Log.i("SplashAd", "本地存在广告，但是缓存中没有图片，通知关闭");
+					dismiss();
+					refresh();
+				}
 			}
 		});
 		imgAd.init(advert, splashAdListener);
-		
+
 		rlytAd.addView(imgAd, rllp);
 
 		JumpLayout jumpLayout = new JumpLayout(context);
@@ -113,8 +142,7 @@ public class SplashAd {
 		ViewGroup vg = (ViewGroup) ((Activity) context).getWindow()
 				.getDecorView();
 		vg.addView(rlytAd, rllp);
-		
-		
+
 		jumpLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -124,40 +152,31 @@ public class SplashAd {
 
 	}
 
-	
 	/**
 	 * 调用跳转接口，回收图片占用的内存
 	 */
 	private void dismiss() {
-		if(splashAdListener == null){
+
+		if (((Activity) context).isFinishing()) {
 			return;
 		}
-		
-		if(((Activity)context).isFinishing()){
-			return;
+
+		if (isDismissed  == false) {
+			Log.i("SplashAd", "通知关闭");
+			splashAdListener.onDismissed();
+			isDismissed = true;
 		}
-		
-		Log.i("SplashAd", "dismiss");
-		splashAdListener.onDismissed();
-		splashAdListener = null;
+		Log.i("SplashAd", "关闭Activity");
+		((Activity) SplashAd.this.context).finish();
 		
 		if (rlytAd != null) {
 			ImageView imgAd = (ImageView) rlytAd.findViewWithTag("img");
-			imgAd.setImageBitmap(null);
-//			if (imgAd != null) {
-//				BitmapDrawable drawable = (BitmapDrawable) imgAd.getDrawable();
-//				if(drawable!=null){
-//					imgAd.setImageBitmap(null);
-////					Bitmap bmp = drawable.getBitmap();
-////					if (null != bmp && !bmp.isRecycled()) {
-////						bmp.recycle();
-////						bmp = null;
-////					}
-//				}
-//			}
+			if (imgAd != null) {
+				imgAd.setImageBitmap(null);
+				
+				Log.i("SplashAd", "清空bitmap");
+			}
 		}
-		((Activity) SplashAd.this.context).finish();
-		
 
 	}
 
@@ -174,11 +193,13 @@ public class SplashAd {
 	 * 刷新一条广告，下次显示
 	 */
 	private void refresh() {
-
+		Log.i("SplashAd", "刷新一条广告");
 		RespLisener listener = new AdRequest.RespLisener() {
 			@Override
-			public void resp(AdvertInfo advert) {
-				share.save(advert);
+			public void resp(AdvertInfo advertInfo) {
+				Log.i("SplashAd", "返回了一条广告");
+				share.save(advertInfo);
+				new ImgDownloader(context).load(null, advertInfo);
 			}
 		};
 		AdRequest adRequest = new AdRequest(context, listener);
@@ -194,10 +215,6 @@ public class SplashAd {
 	 */
 	public void setDuration(long duration) {
 		Duration = duration;
-	}
-
-	public void setSplashAdListener(SplashAdListener splashAdListener) {
-		this.splashAdListener = splashAdListener;
 	}
 
 }
