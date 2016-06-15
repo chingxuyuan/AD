@@ -135,7 +135,7 @@ public class AdView {
 					adViewListener.onAdClick(json);
 				}
 				
-				toastApkDownload();
+				
 				//跳转到广告页面
 				AdIntent intent = new AdIntent(context);
 				intent.start(advertInfo);
@@ -179,18 +179,6 @@ public class AdView {
 	}
 
 	
-	private void toastApkDownload(){
-		if(showToast == false){
-			return;
-		}
-		
-		String url = advertInfo.getTargetURL();
-		if (url.endsWith(".apk")) {
-			Toast.makeText(context,
-					"你点击的"+ advertInfo.getName() +"正在下载。。。", Toast.LENGTH_LONG)
-					.show();
-		}
-	}
 
 	
 	/**

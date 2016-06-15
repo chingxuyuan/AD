@@ -1,4 +1,5 @@
 package com.wwlh.ads.activity;
+import com.wwlh.ads.AdView;
 import com.wwlh.ads.InterstitialAd;
 import com.wwlh.ads.R;
 import com.wwlh.ads.R.id;
@@ -28,19 +29,19 @@ public class MainActivity extends ActionBarActivity {
 		/*
 		 *添加横幅广告 ，rlyt为父RelativeLayout布局，
 		 */
-//	/	AdView adView = new AdView(this, rlyt);
+		AdView adView = new AdView(this, rlyt);
 		
 		
 		/*
 		 * 插屏广告，中间显示
 		 */
-//		final InterstitialAd  iad = new InterstitialAd(this);
-//		findViewById(R.id.btnInterAD).setOnClickListener(new OnClickListener(){
-//			@Override
-//			public void onClick(View view) {
-//				iad.show();
-//			}
-//		});
+		final InterstitialAd  iad = new InterstitialAd(this);
+		findViewById(R.id.btnInterAD).setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				iad.show();
+			}
+		});
 		
 
 	}

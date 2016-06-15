@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 public class ApkDownloader {
 
@@ -26,6 +27,8 @@ public class ApkDownloader {
 	private long downId = 0;
 	private ApkUtil apkUtil;
 	private AdRequest adRequest;
+	
+	private boolean showToast = true;
 	
 	
 	public ApkDownloader(Context context) {
@@ -60,6 +63,8 @@ public class ApkDownloader {
 			return;
 		}
 		
+		
+		
 		//下载应用
 		String apkUrl = App.URL_APK + advertInfo.getTargetURL();
 		if (receiver == null) {
@@ -85,8 +90,28 @@ public class ApkDownloader {
 		long refernece = downloadManager.enqueue(request);
 		SharedPreferences sp = context.getSharedPreferences("addownloadid", 0);
 		sp.edit().putLong("addownloadid", refernece).putInt("advertid", advertInfo.getId()).commit();
+		
+		toastApkDownload(advertInfo.getName());
 
 	}
+	
+	
+	private void toastApkDownload(String name) {
+		if (showToast == false) {
+			return;
+		}
+			Toast.makeText(context, "你点击的应用" + name + "正在下载。。。",
+					Toast.LENGTH_LONG).show();
+	}
+	
+	/**
+	 * 设置是否显示应用下载toast提示
+	 * @param show
+	 */
+	public void setShowToast(boolean show){
+		showToast = show;
+	}
+	
 
 	/**
 	 * 接受下载完成后打开apk
