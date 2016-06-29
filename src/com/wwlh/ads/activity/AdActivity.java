@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.wwlh.ads.R;
 import com.wwlh.ads.SplashAd;
 import com.wwlh.ads.SplashAdListener;
-import com.wwlh.ads.R.layout;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -19,10 +18,14 @@ public class AdActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ad);
+		
+		
+		AdActivity.this.startActivity(new Intent(AdActivity.this,
+				MainActivity.class));
+		this.finish();
+		
 		/*
 		 * 开屏广告
-		 */
-		
 		SplashAdListener splashAdListener = new SplashAdListener() {
 			@Override
 			public void onAdClick(JsonObject info) {
@@ -35,6 +38,8 @@ public class AdActivity extends Activity {
 			}
 		};
 		SplashAd splashAd = new SplashAd(this,splashAdListener);
+		
+		*/
 		
 	}
 
