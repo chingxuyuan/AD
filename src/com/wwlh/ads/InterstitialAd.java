@@ -66,6 +66,17 @@ public class InterstitialAd {
 		initAdRequest();
 		refresh();
 	}
+	
+	
+	/**
+	 * 实例化一个插屏广告
+	 * @param ctx
+	 * @param parent
+	 * @return
+	 */
+	public static InterstitialAd instance(Context ctx){
+		return new InterstitialAd(ctx);
+	}
 
 	/**
 	 * 初始化广告网络请求

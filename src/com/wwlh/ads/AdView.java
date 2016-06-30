@@ -58,6 +58,17 @@ public class AdView {
 	}
 	
 	/**
+	 * 实例化一个底部横幅广告
+	 * @param ctx
+	 * @param parent 指定父布局，类型为RelativeLayout
+	 * @return
+	 */
+	public static AdView instance(Context ctx,RelativeLayout parent){
+		return new AdView(ctx,parent);
+	}
+	
+	
+	/**
 	 * 初始化广告网络请求
 	 */
 	private void initAdRequest(){

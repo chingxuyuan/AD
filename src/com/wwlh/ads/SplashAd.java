@@ -71,6 +71,15 @@ public class SplashAd {
 		
 	}
 
+	/**
+	 * 实例化一个开屏广告
+	 * @param ctx
+	 * @param splashAdListener
+	 * @return
+	 */
+	public static SplashAd instance(Context ctx,SplashAdListener splashAdListener){
+		return new SplashAd(ctx,splashAdListener);
+	}
 	
 	/**
 	 * 刷新下一条数据
