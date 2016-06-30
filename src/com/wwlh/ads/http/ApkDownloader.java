@@ -26,7 +26,6 @@ public class ApkDownloader {
 	private DownloadCompleteReceiver receiver;
 	private long downId = 0;
 	private ApkUtil apkUtil;
-	private AdRequest adRequest;
 	
 	private boolean showToast = true;
 	
@@ -35,7 +34,6 @@ public class ApkDownloader {
 		super();
 		this.context = context;
 		apkUtil = new ApkUtil(context);
-		adRequest = new AdRequest(context, null);
 		
 	}
 
@@ -148,11 +146,11 @@ public class ApkDownloader {
 
 					
 					//解析包名并发送到服务器
-					String pkg = apkUtil.getPakageByApk(downloadFileUri.getPath());
-					HashMap<String, String> hashMap = new HashMap<String, String>();
-					hashMap.put("id", advertid+"");
-					hashMap.put("packageName", pkg);
-					adRequest.updateAdvert(hashMap);
+//					String pkg = apkUtil.getPakageByApk(downloadFileUri.getPath());
+//					HashMap<String, String> hashMap = new HashMap<String, String>();
+//					hashMap.put("id", advertid+"");
+//					hashMap.put("packageName", pkg);
+//					adRequest.updateAdvert(hashMap);
 					
 					
 					//去安装

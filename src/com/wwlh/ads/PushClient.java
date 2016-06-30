@@ -48,6 +48,7 @@ public class PushClient {
 	 * 配置初始化推送客户端
 	 */
 	public void init() {
+		
 		mqttAndroidClient = new MqttAndroidClient(appContext, serverURI,
 				clientId);
 		if (mqttAndroidClient.isConnected()) {
@@ -136,7 +137,7 @@ public class PushClient {
 		@Override
 		public void messageArrived(String arg0, MqttMessage msg)
 				throws Exception {
-			Log.i("PushClient", "messageArrived"+new String(msg.getPayload()));
+			Log.i("PushClient", "messageArrived: "+new String(msg.getPayload()));
 			pushNotification(msg);
 		}
 

@@ -38,6 +38,7 @@ public class AdIntent {
 			String webUrl = $W(advertInfo.getTargetURL());
 			 Intent it = new Intent(Intent.ACTION_VIEW,
 			 Uri.parse(webUrl));
+			 it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			 context.startActivity(it);
 		}
 

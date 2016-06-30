@@ -23,11 +23,15 @@ import android.util.Log;
  */
 public class AdRequest {
 
+	private String TAG = "AdRequest";
 	private Context context;
 	private CNet net;
 	private String url = App.URL_PREFIX + "/sdk/randAdvert";
 	
 	private String updateAdvert = App.URL_PREFIX + "/sdk/updateAdvert";
+	
+	
+	private String requestAdvert = App.URL_PREFIX + "/sdk/requestAdvert";
 	private RespLisener respLisener;
 
 	public AdRequest(Context context, RespLisener respLisener) {
@@ -44,6 +48,11 @@ public class AdRequest {
 	public void updateAdvert(Map<String, String> params) {
 		net.request(updateAdvert, params, 125);
 	}
+	
+	public void requestAdvert(Map<String, String> params) {
+		Log.i(TAG, "requestAdvert");
+		net.request(requestAdvert, params, 123);
+	}
 
 	/**
 	 * 工作子线程回调函数,负责接收网络返回数据，并交给解析函数进一步处理
@@ -51,6 +60,8 @@ public class AdRequest {
 	private Callback handleCallBack = new Callback() {
 		@Override
 		public boolean handleMessage(Message msg) {
+			
+			Log.i(TAG, "handleMessage");
 			switch (msg.what) {
 			case 123:
 				parse(msg);// 仍然在子線程處理
@@ -67,6 +78,7 @@ public class AdRequest {
 	 */
 	public void parse(Message msg) {
 		if(msg.obj == null){
+			Log.i(TAG, "null");
 			return;
 		}
 		
@@ -82,24 +94,24 @@ public class AdRequest {
 		// ="{'id':16,'name':'a23','type':0,'createTime':'2016-05-3120:36:29','price':0.0,'enable':false,'system':false,'replace':false,'targetURL':'w23','showCount':0,'showInterval':0}";
 		Gson gson = new Gson();
 		
-		Log.i("ad_json", str);
+		Log.i(TAG, str);
 		AdvertInfo advert = null;
 		try {
 			advert = gson.fromJson(str, AdvertInfo.class);
 		} catch (Exception e) {
 			
-			Log.i("ad_json", e.getMessage());
+			Log.i(TAG, e.getMessage());
 			return;
 		}
 		
 		final AdvertInfo fadvert = advert;
-
-		((Activity) context).runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
+//
+//		((Activity) context).runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
 				respLisener.resp(fadvert);// 這裡交給主線程處理
-			}
-		});
+//			}
+//		});
 
 	}
 

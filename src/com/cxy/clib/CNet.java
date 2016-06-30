@@ -54,7 +54,7 @@ public class CNet extends CLib {
 		mQueue = Volley.newRequestQueue(context);
 
 		// 新建一个网络请求子线程的handler
-		HandlerThread handlerThread = new HandlerThread("CNet");
+		HandlerThread handlerThread = new HandlerThread("CNet"+System.currentTimeMillis());
 		handlerThread.start();
 		Looper looper = handlerThread.getLooper();
 		this.handler = new Handler(looper, Callback);
