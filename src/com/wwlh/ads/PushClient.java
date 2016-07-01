@@ -34,7 +34,7 @@ public class PushClient {
 	//订阅主题，推送服务器根据主题推送到不同的客户端
 	private String subscriptionTopic = "wwlh";
 	//MQTT客户端
-	private MqttAndroidClient mqttAndroidClient;
+	private static MqttAndroidClient mqttAndroidClient;
 
 	public PushClient(Context ctx) {
 		super();
@@ -57,16 +57,26 @@ public class PushClient {
 		clientId = client.getIMEI();
 		Log.i(TAG, clientId);
 
+		if(mqttAndroidClient!=null){
+			if (mqttAndroidClient.isConnected()) {
+				Log.i("PushClient", "isConnected");
+				return;
+			}
+		}
 		mqttAndroidClient = new MqttAndroidClient(appContext, serverURI,
 				clientId);
-		if (mqttAndroidClient.isConnected()) {
-			Log.i("PushClient", "isConnected");
-			return;
-		}
+		
 		mqttAndroidClient.setCallback(mqttCallback);
 
 		MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-		mqttConnectOptions.setCleanSession(true);
+		  //设置超时时间  
+		mqttConnectOptions.setConnectionTimeout(10000);  
+          
+        //设置会话心跳时间  
+		mqttConnectOptions.setKeepAliveInterval(50000);  
+		
+		 //设置是否清除会话信息  
+		mqttConnectOptions.setCleanSession(false);
 		try {
 			mqttAndroidClient
 					.connect(mqttConnectOptions, null, connectListener);
@@ -90,6 +100,7 @@ public class PushClient {
 		@Override
 		public void onSuccess(IMqttToken arg0) {
 			subscribeToTopic();
+			Log.i("PushClient", "onSuccess");
 		}
 
 	};

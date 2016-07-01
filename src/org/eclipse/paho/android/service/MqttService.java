@@ -227,13 +227,16 @@ public class MqttService extends Service implements MqttTraceHandler {
 	// needs to be set by the activity as appropriate
 	private String traceCallbackId;
 	// state of tracing
+	//跟踪状态
 	private boolean traceEnabled = false;
 
 	// somewhere to persist received messages until we're sure
 	// that they've reached the application
+	//存储消息用
 	MessageStore messageStore;
 
 	// An intent receiver to deal with changes in network connectivity
+	//监听网络状态改变
 	private NetworkConnectionIntentReceiver networkConnectionMonitor;
 
   //a receiver to recognise when the user changes the "background data" preference
@@ -241,12 +244,16 @@ public class MqttService extends Service implements MqttTraceHandler {
   // Only really relevant below android version ICE_CREAM_SANDWICH - see
   // android docs
   private BackgroundDataPreferenceReceiver backgroundDataPreferenceMonitor;
+  
+  
   private volatile boolean backgroundDataEnabled = true;
   
   // a way to pass ourself back to the activity
+  //跟activity交互的句柄
   private MqttServiceBinder mqttServiceBinder;
 
 	// mapping from client handle strings to actual client connections.
+  	//客户端有哪些连接
 	private Map<String/* clientHandle */, MqttConnection/* client */> connections = new ConcurrentHashMap<String, MqttConnection>();
 	
   public MqttService() {
@@ -256,6 +263,7 @@ public class MqttService extends Service implements MqttTraceHandler {
   /**
    * pass data back to the Activity, by building a suitable Intent object and
    * broadcasting it
+   * 返回activity
    * 
    * @param clientHandle
    *            source of the data
@@ -285,6 +293,7 @@ public class MqttService extends Service implements MqttTraceHandler {
 
   /**
    * Get an MqttConnection object to represent a connection to a server
+   * 过去一个客户端连接
    * 
    * @param serverURI specifies the protocol, host name and port to be used to connect to an MQTT server
    * @param clientId specifies the name by which this connection should be identified to the server
