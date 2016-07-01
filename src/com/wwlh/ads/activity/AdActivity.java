@@ -26,7 +26,7 @@ public class AdActivity extends Activity {
 		
 		/*
 		 * 开屏广告
-		 * 	*/
+		 * 	
 		SplashAdListener splashAdListener = new SplashAdListener() {
 			@Override
 			public void onAdClick(JsonObject info) {
@@ -40,7 +40,7 @@ public class AdActivity extends Activity {
 		};
 		 SplashAd.instance(this,splashAdListener);
 		
-	
+	*/
 		
 	}
 

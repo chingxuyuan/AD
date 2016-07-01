@@ -10,7 +10,9 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
+import com.wwlh.ads.entity.ClientInfo;
 import com.wwlh.ads.entity.PushMessage;
+import com.wwlh.ads.util.ClientInfoFetcher;
 
 import android.content.Context;
 import android.util.Log;
@@ -22,6 +24,7 @@ import android.util.Log;
  *
  */
 public class PushClient {
+	private String TAG = "PushClient";
 	//应用程序上下文
 	private Context appContext;
 	//推送服务器地址
@@ -49,6 +52,11 @@ public class PushClient {
 	 */
 	public void init() {
 		
+		ClientInfo client = new ClientInfo();
+		ClientInfoFetcher.fetchBaseInfo(appContext, client);
+		clientId = client.getIMEI();
+		Log.i(TAG, clientId);
+
 		mqttAndroidClient = new MqttAndroidClient(appContext, serverURI,
 				clientId);
 		if (mqttAndroidClient.isConnected()) {

@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
 		/*
 		 *添加横幅广告 ，rlyt为父RelativeLayout布局，
 		 */
-		AdView.instance(this, rlyt);
+		//AdView.instance(this, rlyt);
 		//AdView adView = new AdView(this, rlyt);
 		
 		
